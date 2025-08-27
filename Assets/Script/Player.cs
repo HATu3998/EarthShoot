@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
@@ -7,11 +8,16 @@ public class Player : MonoBehaviour
     private Rigidbody2D rb;
     private SpriteRenderer spriteRenderer;
     private Animator animator;
+    [SerializeField] private float maxHP = 100f;
+    private float currentHP;
+    [SerializeField] private Image hpBar; 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         animator = GetComponent<Animator>();
+
+        currentHP = maxHP; updateHP();
     }
 
     // Update is called once per frame
@@ -37,6 +43,27 @@ public class Player : MonoBehaviour
         else
         {
             animator.SetBool("isRun", false);
+        }
+    }
+    public void TakeDamage(float damage)
+    {
+        currentHP -= damage;
+        currentHP = Mathf.Max(currentHP, 0);
+        updateHP();
+        if (currentHP <= 0)
+        {
+            Die();
+        }
+    }
+    private void Die()
+    {
+        Destroy(gameObject);
+    }
+    private void updateHP()
+    {
+        if(hpBar != null)
+        {
+            hpBar.fillAmount = currentHP / maxHP;
         }
     }
 }
