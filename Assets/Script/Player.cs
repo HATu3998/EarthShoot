@@ -55,6 +55,15 @@ public class Player : MonoBehaviour
             Die();
         }
     }
+    public void Heal(float heal)
+    {
+        if (currentHP < maxHP)
+        {
+            currentHP += heal;
+            currentHP = Mathf.Min(currentHP, maxHP);
+            updateHP();
+        }
+    }
     private void Die()
     {
         Destroy(gameObject);

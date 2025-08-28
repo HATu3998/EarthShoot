@@ -48,6 +48,15 @@ public abstract class Enemy : MonoBehaviour
             Die();
         }
     }
+    public   void  Heal(float heal)
+    {
+        if(currentHP < maxHP)
+        { 
+            currentHP += heal;
+            currentHP = Mathf.Min(currentHP, maxHP);
+            updateHpBar();
+        }
+    }
     protected virtual void Die()
     {
         Destroy(gameObject);
