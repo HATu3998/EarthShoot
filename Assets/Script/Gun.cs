@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 
 public class Gun : MonoBehaviour
@@ -10,6 +11,7 @@ public class Gun : MonoBehaviour
     private float nextShot;
     [SerializeField] private int maxAmmor = 24;
     public int currentAmmor;
+    [SerializeField] private TextMeshProUGUI ammoText;
 
     void Start()
     {
@@ -23,6 +25,21 @@ public class Gun : MonoBehaviour
         RotateGun();
         Shot();
         Reload();
+        UpdateAmmorText();
+    }
+    private void UpdateAmmorText()
+    {
+        if(ammoText != null)
+        {
+            if(currentAmmor > 0)
+            {
+                ammoText.text = currentAmmor.ToString();
+            }
+            else
+            {
+                ammoText.text = "Empty";
+            }
+        }
     }
     void RotateGun()
     {
