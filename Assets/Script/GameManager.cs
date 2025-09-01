@@ -1,3 +1,4 @@
+using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,9 +13,13 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Image energyBar;
     [SerializeField] GameObject gameUI;
 
-    [SerializeField] GameObject gameMenu;
-    [SerializeField] GameObject gameOver;
-    [SerializeField] GameObject gamePause;
+    [SerializeField] private GameObject gameMenu;
+    [SerializeField] private GameObject gameOver;
+    [SerializeField]  private GameObject gamePause;
+    [SerializeField] private GameObject winMenu;
+    [SerializeField] private CinemachineCamera cam; 
+
+    [SerializeField] private AudioManager audioManager;
 
     void Start()
     {
@@ -22,6 +27,8 @@ public class GameManager : MonoBehaviour
         UpdateEnergyBar();
         boss.SetActive(false);
         MainMenu();
+        audioManager.StopAudioGame();
+        cam.Lens.OrthographicSize = 5f;
     }
 
     // Update is called once per frame
@@ -48,6 +55,8 @@ public class GameManager : MonoBehaviour
         boss.SetActive(true);
         enemySpawn.SetActive(false);
         gameUI.SetActive(false);
+        audioManager.playBossAudio();
+        cam.Lens.OrthographicSize = 10f;
     }
     private void UpdateEnergyBar()
     {
@@ -63,17 +72,18 @@ public class GameManager : MonoBehaviour
         gameMenu.SetActive(true);
         gameOver.SetActive(false);
         gamePause.SetActive(false);
+        winMenu.SetActive(false);
         Time.timeScale = 0f;
     }
    public void GameOverMenu()
     {
-        Debug.Log("GameOverMenu ???c g?i");
-        Debug.Log("gameOver.activeSelf tr??c khi b?t = " + gameOver.activeSelf);
+    
 
         gameUI.SetActive(true);
-        gameOver.SetActive(true); Debug.Log("gameOver.activeSelf sau khi b?t = " + gameOver.activeSelf);
+        gameOver.SetActive(true);  
         gameMenu.SetActive(false);
         gamePause.SetActive(false);
+        winMenu.SetActive(false);
         Time.timeScale = 0f;
     }
     public void PauseGameMenu()
@@ -81,6 +91,7 @@ public class GameManager : MonoBehaviour
         gamePause.SetActive(true);
         gameOver.SetActive(false);
         gameMenu.SetActive(false);
+        winMenu.SetActive(false);
         Time.timeScale = 0f;
     }
    public void StartGame()
@@ -88,13 +99,24 @@ public class GameManager : MonoBehaviour
         gamePause.SetActive(false);
         gameOver.SetActive(false);
         gameMenu.SetActive(false);
+        winMenu.SetActive(false);
         Time.timeScale = 1f;
+        audioManager.playDefaultAudio();
     }
   public void ResumeGame()
     {
         gamePause.SetActive(false);
         gameOver.SetActive(false);
         gameMenu.SetActive(false);
+        winMenu.SetActive(false);
         Time.timeScale = 1f;
     }
+    public void winGameMenu() {
+        gamePause.SetActive(false);
+        gameOver.SetActive(false);
+        gameMenu.SetActive(false);
+        winMenu.SetActive(true );
+        Time.timeScale = 0f;
+    }
+
 }
