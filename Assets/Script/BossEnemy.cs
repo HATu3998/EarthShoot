@@ -11,6 +11,7 @@ public class BossEnemy : Enemy
     [SerializeField] private float hpValue = 100f;
     [SerializeField] private GameObject miniEnemy;
     [SerializeField] private float skillCoolDown = 3f;
+    
    private float nextTimeSkill;
     [SerializeField] private GameObject usbPrefabs;
     protected override void Die()
@@ -18,6 +19,7 @@ public class BossEnemy : Enemy
         Instantiate(usbPrefabs, transform.position, Quaternion.identity);
         base.Die();
     }
+    
     protected override void Update()
     {
         base.Update();
@@ -31,17 +33,22 @@ public class BossEnemy : Enemy
     {
         if (collision.CompareTag("Player"))
         {
-            if (player != null)
+            if (player != null   )
             {
                 player.TakeDamage(enterDamage);
             }
+          
         }
     }
     private void OnTriggerStay2D(Collider2D collision)
     {
-        if (collision.CompareTag("Player"))
+        if (collision.CompareTag("Player") )
         {
-            player.TakeDamage(stayDamage);
+            if (player != null)
+            {
+                player.TakeDamage(stayDamage);
+            }
+            
         }
     }
     private void BanDanThuong()

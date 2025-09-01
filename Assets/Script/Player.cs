@@ -10,12 +10,15 @@ public class Player : MonoBehaviour
     private Animator animator;
     [SerializeField] private float maxHP = 100f;
     private float currentHP;
-    [SerializeField] private Image hpBar; 
+    [SerializeField] private Image hpBar;
+    [SerializeField] private GameManager gameManager;
+    private bool isDead = false;
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         animator = GetComponent<Animator>();
+        
 
         currentHP = maxHP; updateHP();
     }
@@ -24,6 +27,11 @@ public class Player : MonoBehaviour
     void Update()
     {
         MovePlayer();
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            gameManager.PauseGameMenu();
+            Debug.Log("pause");
+        }
     }
     void MovePlayer()
     {
@@ -47,9 +55,11 @@ public class Player : MonoBehaviour
     }
     public void TakeDamage(float damage)
     {
+        if (isDead) return;
         currentHP -= damage;
         currentHP = Mathf.Max(currentHP, 0);
         updateHP();
+       
         if (currentHP <= 0)
         {
             Die();
@@ -66,7 +76,17 @@ public class Player : MonoBehaviour
     }
     private void Die()
     {
-        Destroy(gameObject);
+        Debug.Log("Player Die called, HP = " + currentHP);
+        Debug.Log("isDead = " + isDead);
+        isDead = true;
+
+        spriteRenderer.enabled = false;
+        rb.linearVelocity = Vector2.zero;
+        animator.SetBool("isRun", false);
+
+        gameManager.GameOverMenu();
+        Debug.Log("close");
+
     }
     private void updateHP()
     {
